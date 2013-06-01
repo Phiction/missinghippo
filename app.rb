@@ -1,10 +1,20 @@
 require 'sinatra'
 require 'data_mapper' # requires all the gems listed above
 require 'json'
+require 'cloudinary'
 require './config/database'
 
 enable :logging
 use Rack::Logger
+
+configure :development do
+  Cloudinary.config do |config|
+    config.cloud_name = 'hfnqsrwbp'
+    config.api_key = '552656284986424'
+    config.api_secret = 'LF9pQZT68RxFqZnnJjDA1L8Q6W8'
+  end
+  CLOUDINARY_URL='cloudinary://552656284986424:LF9pQZT68RxFqZnnJjDA1L8Q6W8@hfnqsrwbp'
+end
 
 get '/' do
   erb :index, :layout => :layout
@@ -17,7 +27,20 @@ end
 
 post '/' do
   content_type :json
-
+  logger.info "-----#{params}-----"
+  if params[:image]
+    upload = Cloudinary::Uploader.upload(File.open(params[:image][:tempfile]))
+  end
+  #{
+  #    :url        => 'http://res.cloudinary.com/demo/image/upload/sample.jpg',
+  #    :secure_url => 'https://cloudinary-a.akamaihd.net/demo/image/upload/sample.jpg',
+  #    :public_id  => 'sample',
+  #    :version    => '1312461204',
+  #    :width      => 864,
+  #    :height     => 564,
+  #    :bytes      => 120253
+  #}
+  logger.info "-----#{upload['url']}-----"
   @poster = Poster.new(
       :uri        => '',
       :layout_id  => params[:layout_id].to_i,
@@ -26,6 +49,7 @@ post '/' do
       :note       => params[:note],
       :phone      => params[:phone],
       :email      => params[:email],
+      :image_url  => upload['url'],
       :created_at => Time.now
   )
 

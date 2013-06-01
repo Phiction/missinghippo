@@ -7,9 +7,14 @@ class Poster
   property :name,       String
   property :color,      String
   property :note,       Text
+  property :image_url,  Text
+
   property :phone,      String
   property :email,      String
+
   property :created_at, DateTime
 
   has n, :layouts
+
+  validates_presence_of :layout_id
 end

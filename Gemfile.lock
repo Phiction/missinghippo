@@ -2,7 +2,11 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.8)
+    aws_cf_signer (0.1.1)
     bcrypt-ruby (3.0.1)
+    cloudinary (1.0.58)
+      aws_cf_signer
+      rest-client
     data_objects (0.10.13)
       addressable (~> 2.1)
     datamapper (1.2.0)
@@ -54,11 +58,14 @@ GEM
     fastercsv (1.5.5)
     json (1.8.0)
     json_pure (1.8.0)
+    mime-types (1.23)
     multi_json (1.7.4)
     pg (0.15.1)
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.4.2)
@@ -73,6 +80,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cloudinary
   datamapper (~> 1.2.0)
   dm-postgres-adapter
   pg

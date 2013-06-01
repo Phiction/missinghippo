@@ -10,7 +10,7 @@ use Rack::Logger
 configure :development do
   Cloudinary.config do |config|
     config.cloud_name = 'hfnqsrwbp'
-    config.api_key = '552656284986424'
+    config.api_key    = '552656284986424'
     config.api_secret = 'LF9pQZT68RxFqZnnJjDA1L8Q6W8'
   end
   CLOUDINARY_URL='cloudinary://552656284986424:LF9pQZT68RxFqZnnJjDA1L8Q6W8@hfnqsrwbp'
@@ -20,6 +20,11 @@ get '/' do
   erb :index, :layout => :layout
 end
 
+get '/posters' do
+  @posters = Poster.all
+  erb :posters, :layout => :layout
+end
+
 get '/:uri' do
   poster = Poster.where(:uri => params[:uri]).first
   erb :uri, :layout => "layouts/#{poster.layout.file_name}"
@@ -27,30 +32,37 @@ end
 
 post '/' do
   content_type :json
-  logger.info "-----#{params}-----"
+
   if params[:image]
     upload = Cloudinary::Uploader.upload(File.open(params[:image][:tempfile]))
+    logger.info "-----#{upload}"
   end
-  #{
-  #    :url        => 'http://res.cloudinary.com/demo/image/upload/sample.jpg',
-  #    :secure_url => 'https://cloudinary-a.akamaihd.net/demo/image/upload/sample.jpg',
-  #    :public_id  => 'sample',
-  #    :version    => '1312461204',
-  #    :width      => 864,
-  #    :height     => 564,
-  #    :bytes      => 120253
+  #{"public_id"=>"tzvmzdbrbu2oe2s4dbr4",
+  # "version"=>1370128250,
+  # "signature"=>"bb0e8e7f8a15d234797f1c7c71de4883fcfde167",
+  # "width"=>462,
+  # "height"=>580,
+  # "format"=>"jpg",
+  # "resource_type"=>"image",
+  # "created_at"=>"2013-06-01T23:10:50Z",
+  # "bytes"=>56908,
+  # "type"=>"upload",
+  # "url"=>"http://res.cloudinary.com/hfnqsrwbp/image/upload/v1370128250/tzvmzdbrbu2oe2s4dbr4.jpg",
+  # "secure_url"=>"https://cloudinary-a.akamaihd.net/hfnqsrwbp/image/upload/v1370128250/tzvmzdbrbu2oe2s4dbr4.jpg"
   #}
-  logger.info "-----#{upload['url']}-----"
+
   @poster = Poster.new(
-      :uri        => '',
-      :layout_id  => params[:layout_id].to_i,
-      :name       => params[:name],
-      :color      => params[:color],
-      :note       => params[:note],
-      :phone      => params[:phone],
-      :email      => params[:email],
-      :image_url  => upload['url'],
-      :created_at => Time.now
+      :uri          => '',
+      :layout_id    => params[:layout_id].to_i,
+      :name         => params[:name],
+      :color        => params[:color],
+      :note         => params[:note],
+      :phone        => params[:phone],
+      :email        => params[:email],
+      :image_id     => upload['public_id'],
+      :image_format => upload['format'],
+      :image_url    => upload['url'],
+      :created_at   => Time.now
   )
 
   if @poster.save
@@ -65,6 +77,16 @@ post '/' do
     #end
     { :errors => @poster.errors.full_messages }.to_json
   end
+end
+
+get '/:id/delete' do
+  poster = Poster.get(params[:id].to_i)
+
+  Cloudinary::Api.delete_resources([poster.image_id])
+
+  poster.destroy
+
+  redirect '/posters'
 end
 
 post '/subscribe' do

@@ -1,0 +1,24 @@
+<div class="row-fluid marketing">
+  <div class="span12">
+    <table border="1" style="padding:10px;width:100%;">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th style="width:70px;">Image</th>
+          <th>Pet Name</th>
+          <th>Email</th>
+          <th>Controls</th>
+        </tr>
+      </thead>
+      <% @posters.each do |poster| %>
+        <tr>
+          <td><%= poster.id %></td>
+          <td><img src="<%= "http://res.cloudinary.com/hfnqsrwbp/image/upload/w_50,h_50,c_fill/#{poster.image_id}.#{poster.image_format}" %>" /></td>
+          <td><%= poster.name %></td>
+          <td><%= poster.email %></td>
+          <td><a href="/<%= poster.id %>/delete">DELETE</a></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

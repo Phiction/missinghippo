@@ -1,14 +1,14 @@
     .portfolio_intro {
-        background-image: url(../image/portfolio_girl.jpg);
+        background-image: url(../image/backgrounds/boston.jpg);
     }
     .pricing_table_intro {
-        background-image: url(../image/pricing_table_boy.jpg);
+        background-image: url(../image/backgrounds/fence.jpg);
     }
     .about_us_intro {
-        background-image: url(../image/team_img.jpg);
+        background-image: url(../image/backgrounds/sitting.jpg);
     }
     .contact_us_intro {
-        background-image: url(../image/contact_img.jpg);
+        background-image: url(../image/backgrounds/little-girl.jpg);
     }
 @media (min-width: 769px) and (max-width: 979px) {
     .logo {

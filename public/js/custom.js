@@ -278,7 +278,7 @@ $('#poster_form').submit(function()
       console.log(data);
     } else {
       $('#poster_form')[0].reset();
-      $('progress').html('');
+      $('#progress').html('');
       $('#preview_iframe').attr('src', '/' + data.uri + '.html');
       $('html, body').animate({ scrollTop: $('#preview_container').offset().top },'slow');
     }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<head>
+  <title>Lost Pet</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <style type="text/css">
+    h1   { background:yellow;font-size:100px;line-height:100px;margin-bottom:20px;padding:20px;text-align:center;text-transform:uppercase; }
+    h2   { background:red;color:white;font-size:100px;line-height:100px;margin-top:20px;padding:20px;text-align:center;text-transform:uppercase; }
+    h3   { color:red;font-size:80px;line-height:80px;text-align:center;text-transform:uppercase; }
+    img  { display:block;margin:0 auto;width:50%; }
+    .content-container { font-size:60px;line-height:80px; }
+    .align-right { text-align:right; }
+    .align-left { font-weight:bold;text-transform:capitalize; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span12">
+        <h1>Lost Pet</h1>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span12">
+        <img src="<%= @poster.image_url %>" />
+      </div>
+    </div>
+
+    <div class="clearfix"><br /></div>
+
+    <div class="row-fluid content-container">
+      <div class="span4 align-right">
+        Name:
+      </div>
+      <div class="span8 align-left">
+        <%= @poster.name %>
+      </div>
+    </div>
+
+    <% unless @poster.breed.empty? %>
+      <div class="row-fluid content-container">
+        <div class="span4 align-right">
+          Breed:
+        </div>
+        <div class="span8 align-left">
+          <%= @poster.breed %>
+        </div>
+      </div>
+    <% end %>
+
+    <% unless @poster.gender == 0 %>
+      <div class="row-fluid content-container">
+        <div class="span4 align-right">
+          Gender:
+        </div>
+        <div class="span8 align-left">
+          <%= @poster.gender == 1 ? 'Male' : 'Female' %>
+        </div>
+      </div>
+    <% end %>
+
+    <% unless @poster.age.blank? %>
+      <div class="row-fluid content-container">
+        <div class="span4 align-right">
+          Age:
+        </div>
+        <div class="span8 align-left">
+          <%= @poster.age %>
+        </div>
+      </div>
+    <% end %>
+
+    <% unless @poster.color.blank? %>
+      <div class="row-fluid content-container">
+        <div class="span4 align-right">
+          Color:
+        </div>
+        <div class="span8 align-left">
+          <%= @poster.color %>
+        </div>
+      </div>
+    <% end %>
+
+    <% unless @poster.location.blank? %>
+      <div class="row-fluid content-container">
+        <div class="span4 align-right">
+          Location:
+        </div>
+        <div class="span8 align-left">
+          <%= @poster.location %>
+        </div>
+      </div>
+    <% end %>
+
+    <%# unless @poster.reward %>
+      <div class="row-fluid">
+        <div class="span12">
+          <h3>Reward</h3>
+        </div>
+      </div>
+    <%# end %>
+
+    <% unless @poster.contact_phone.blank? %>
+      <div class="row-fluid">
+        <div class="span12">
+          <h2><%= @poster.contact_phone %></h2>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

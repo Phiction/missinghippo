@@ -1,0 +1,93 @@
+<li id="portfolio">
+  <section class="portfolio_intro intro">
+    <div class="black_over">
+      <div class="container text_center">
+        <div class="intro_pad">
+          <h1>Original Design</h1>
+          <h2>Preview of work, social buttons</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="portfolio_main">
+    <div class="portfolio_top top_box_left"></div>
+    <div class="portfolio_mid">
+      <div class="container">
+        <h3 class="text_center">New Poster</h3>
+        <div class="lines sub_title text_center">Start the search for your pet</div>
+        <form method="POST" enctype="multipart/form-data" id="poster_form">
+          <div class="row-fluid">
+            <div class="span6">
+              <p>
+                <label>Layout</label>
+                <input type="number" name="layout_id" />
+              </p>
+              <p>
+                <label>Zip Code <span class="required">*</span></label>
+                <input type="text" name="zip_code" />
+              </p>
+              <p>
+                <label>Contact Name</label>
+                <input type="text" name="contact_name" />
+              </p>
+              <p>
+                <label>Contact Email</label>
+                <input type="text" name="contact_email" />
+              </p>
+              <p>
+                <label>Contact Phone</label>
+                <input type="text" name="contact_phone" />
+              </p>
+              <p>
+                <label>Name <span class="required">*</span></label>
+                <input type="text" name="name" />
+              </p>
+              <p>
+                <label>Breed</label>
+                <input type="text" name="breed" />
+              </p>
+              <p>
+                <label>Gender</label>
+                <select name="gender"><option value=""></option><option value="1">Male</option><option value="2">Female</option></select>
+              </p>
+              <p>
+                <label>Age</label>
+                <input type="text" name="age" />
+              </p>
+              <p>
+                <label>Color</label>
+                <input type="text" name="color" />
+              </p>
+              <p>
+                <label>More Information</label>
+                <textarea name="note"></textarea>
+              </p>
+              <p>
+                <label>Neighborhood</label>
+                <input type="text" name="location" />
+              </p>
+              <p>
+                <label>Would you like to note a reward?</label>
+                <select name="reward"><option value="false">No</option><option value="true">Yes</option></select>
+              </p>
+            </div>
+
+            <div class="span6">
+              <p>
+                <label>Photo</label>
+                <input type="file" name="image" />
+              </p>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span12">
+              <input type="submit" value="SUBMIT" />
+              <div id="progress"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="portfolio_bot bot_box_left"><a href="#home" class="back2top"><i class="icon-chevron-up"></i></a></div>
+  </section>
+</li>

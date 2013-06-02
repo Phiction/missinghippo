@@ -2,11 +2,8 @@ class Layout
   include DataMapper::Resource
 
   property :id,        Serial
-  property :name,      String
-  property :file_name, String
+  property :name,      String, :required => true
+  property :file_name, String, :required => true
 
-  belongs_to :poster
-
-  validates_presence_of :name
-  validates_presence_of :file_name
+  has n, :posters
 end

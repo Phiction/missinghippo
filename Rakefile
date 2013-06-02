@@ -1,15 +1,21 @@
 require 'rubygems'
 require 'sinatra'
 require 'data_mapper'
+require 'json'
 require './config/database'
 
 namespace :db do
-  require './config/database'
-
   desc 'Load seed data'
   task :seed do
-    DataMapper.repository(:default).adapter.execute("TRUNCATE fractures RESTART IDENTITY CASCADE;")
-    puts "Removed all records from Fracture table"
+    DataMapper.repository(:default).adapter.execute("TRUNCATE layouts RESTART IDENTITY CASCADE;")
+    #if DataMapper.finalize.auto_migrate!
+    #  # puts "Removed all records from Fracture table"
+    #  puts "Migrated Database"
+    #end
+
+    if Layout.create(:name => 'Original', :file_name => 'original')
+      puts "Created Layout:Original"
+    end
   end
 
   desc 'Migrate database'

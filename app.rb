@@ -3,6 +3,9 @@ require 'data_mapper' # requires all the gems listed above
 require 'json'
 require 'cloudinary'
 require './config/database'
+require 'pdfkit'
+
+use PDFKit::Middleware
 
 enable :logging
 use Rack::Logger
@@ -16,8 +19,18 @@ configure :development do
   CLOUDINARY_URL='cloudinary://552656284986424:LF9pQZT68RxFqZnnJjDA1L8Q6W8@hfnqsrwbp'
 end
 
+PDFKit.configure do |config|
+  config.default_options = {
+      :page_size     => 'Letter',
+      :margin_top    => '0.4in',
+      :margin_right  => '0.5in',
+      :margin_bottom => '0.5in',
+      :margin_left   => '0.5in'
+  }
+end
+
 get '/' do
-  erb :index, :layout => :layout
+  erb :index, :layout => :parasponsive
 end
 
 get '/posters' do
@@ -25,9 +38,34 @@ get '/posters' do
   erb :posters, :layout => :layout
 end
 
+get '/:uri.:format' do
+  @poster = Poster.first(:uri => params[:uri])
+
+  case params[:format]
+    when 'html'
+      erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+    when 'pdf'
+      url = "/#{@poster.uri}.html"
+      kit = PDFKit.new(url, :page_size => 'Letter')
+      pdf = kit.to_pdf
+    else
+      erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+  end
+end
+
 get '/:uri' do
-  poster = Poster.where(:uri => params[:uri]).first
-  erb :uri, :layout => "layouts/#{poster.layout.file_name}"
+  @poster = Poster.first(:uri => params[:uri])
+  erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+end
+
+get '/:id/delete' do
+  poster = Poster.get(params[:id].to_i)
+
+  Cloudinary::Api.delete_resources([poster.image_id])
+
+  poster.destroy
+
+  redirect '/posters'
 end
 
 post '/' do
@@ -35,7 +73,6 @@ post '/' do
 
   if params[:image]
     upload = Cloudinary::Uploader.upload(File.open(params[:image][:tempfile]))
-    logger.info "-----#{upload}"
   end
   #{"public_id"=>"tzvmzdbrbu2oe2s4dbr4",
   # "version"=>1370128250,
@@ -52,22 +89,34 @@ post '/' do
   #}
 
   @poster = Poster.new(
-      :uri          => '',
-      :layout_id    => params[:layout_id].to_i,
-      :name         => params[:name],
-      :color        => params[:color],
-      :note         => params[:note],
-      :phone        => params[:phone],
-      :email        => params[:email],
-      :image_id     => upload['public_id'],
-      :image_format => upload['format'],
-      :image_url    => upload['url'],
-      :created_at   => Time.now
+      :uri           => '',
+      :zip_code      => params[:zip_code].to_i,
+      :contact_name  => params[:contact_name],
+      :contact_phone => params[:contact_phone],
+      :contact_email => params[:contact_email],
+
+      :layout_id     => params[:layout_id].to_i,
+      :name          => params[:name],
+      :breed         => params[:breed],
+      :gender        => params[:gender].to_i,
+      :age           => params[:age],
+      :color         => params[:color],
+      :note          => params[:note],
+      :location      => params[:location],
+      :reward        => params[:reward],
+
+      :created_at    => Time.now
   )
+
+  if params[:image]
+    @poster.image_id     = upload['public_id']
+    @poster.image_format = upload['format']
+    @poster.image_url    = upload['url']
+  end
 
   if @poster.save
     if @poster.update(:uri => @poster.id.to_s(36))
-      { :url => "http://missinghippo.com/#{@poster.uri}.pdf" }.to_json
+      @poster.to_json
     else
       { :errors => 'Not a valid URL format' }.to_json
     end
@@ -77,16 +126,6 @@ post '/' do
     #end
     { :errors => @poster.errors.full_messages }.to_json
   end
-end
-
-get '/:id/delete' do
-  poster = Poster.get(params[:id].to_i)
-
-  Cloudinary::Api.delete_resources([poster.image_id])
-
-  poster.destroy
-
-  redirect '/posters'
 end
 
 post '/subscribe' do

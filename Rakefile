@@ -20,6 +20,10 @@ namespace :db do
 
   desc 'Migrate database'
   task :migrate do
+    repository(:default).adapter.select('DROP TABLE posters;')
+    repository(:default).adapter.select('DROP TABLE layouts;')
+    repository(:default).adapter.select('DROP TABLE newsletters;')
+    
     DataMapper.auto_migrate!
     puts "Migrated Database"
   end

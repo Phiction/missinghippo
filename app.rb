@@ -40,22 +40,25 @@ end
 
 get '/:uri.:format' do
   @poster = Poster.first(:uri => params[:uri])
+  layout  = Layout.get(@poster.layout_id)
 
   case params[:format]
     when 'html'
-      erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+      erb :uri, :layout => "layouts/#{layout.file_name}".to_sym
     when 'pdf'
       url = "/#{@poster.uri}.html"
       kit = PDFKit.new(url, :page_size => 'Letter')
       pdf = kit.to_pdf
     else
-      erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+      erb :uri, :layout => "layouts/#{layout.file_name}".to_sym
   end
 end
 
 get '/:uri' do
   @poster = Poster.first(:uri => params[:uri])
-  erb :uri, :layout => "layouts/#{@poster.layout.file_name}".to_sym
+  layout  = Layout.get(@poster.layout_id)
+
+  erb :uri, :layout => "layouts/#{layout.file_name}".to_sym
 end
 
 get '/:id/delete' do

@@ -5,5 +5,5 @@ class Layout
   property :name,      String, :required => true
   property :file_name, String, :required => true
 
-  has n, :posters
+  #has n, :posters
 end

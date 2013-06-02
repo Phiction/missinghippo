@@ -25,7 +25,7 @@ class Poster
 
   property :created_at,    DateTime
 
-  belongs_to :layout
+  #belongs_to :layout
 
   #:after send_notifications
   #
